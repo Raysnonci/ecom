@@ -23,6 +23,8 @@
 
   <!-- Scroll to top -->
   @include('admin.layouts.js')
+  <x:notify-messages />
+        @notifyJs
 </body>
 
 </html>
