@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -71,9 +72,10 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
@@ -83,9 +85,25 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        //
+        //dd($request->all());
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required'
+        ]);
+        $category = Category::find($id);
+        $image = $category->image;
+        if($request->file('image')){
+            \Illuminate\Support\Facades\Storage::delete($image);
+            $image = $request->file('image')->store('public/files');
+        }
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->image = $image;
+        $category->save();
+        notify()->success('Category Updated Successfuly');
+        return redirect()->back();
     }
 
     /**
@@ -94,8 +112,13 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        $file = $category->image;
+        $category->delete();
+        \Illuminate\Support\Facades\Storage::delete($file);
+        notify()->success('Category Deleted Successfuly');
+        return redirect()->route('category.index');
     }
 }

@@ -24,6 +24,7 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>Action</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -33,7 +34,14 @@
                                 <td><img src="{{ Storage::url($category->image) }}" width="100"></td>
                                 <td>{{ $category->name }}</td>
                                 <td>{{ $category->description }}</td>
-                                <td><a href="#" class="btn btn-sm btn-danger">Delete</a></td>
+                                <td><a href="{{ route('category.edit', [$category->id]) }}" class="btn btn-sm btn-primary">Edit</a></td>
+                                <td>
+                                  <form action="{{ route('category.destroy', [$category->id]) }}" method="POST" onsubmit="return confirmDelete()">
+                                    @csrf
+                                    {{ method_field('DELETE') }}
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                  </form>
+                                </td>
                             </tr>
                         @empty
                             <td>No category created</td>

@@ -23,7 +23,9 @@
 
   <!-- Scroll to top -->
   @include('admin.layouts.js')
-  <x:notify-messages />
+  @include('notify::messages')
+        // Laravel 7 or greater
+        <x:notify-messages />
         @notifyJs
 </body>
 
