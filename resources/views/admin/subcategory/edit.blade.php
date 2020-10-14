@@ -11,8 +11,9 @@
 
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <form action="{{ route('category.update', [$subcategory->id]) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('subcategory.update', [$subcategory->id]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                {{ method_field('PUT') }}
                 <div class="card mb-6">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Edit Sub Category</h6>
@@ -24,7 +25,7 @@
                         <x-input field="image" id="customFile" label="Choose File" type="file" /> --}}
                         <div class="form-group"> 
                             <label for="name">Name</label>
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" aria-describedby="" placeholder="Enter name of the sub category" value="{{ old('name')?  old('name'):$subcategory->name}}">
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" aria-describedby="" value="{{ old('name')?  old('name'):$subcategory->name}}">
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -35,11 +36,14 @@
                             <div class="custom-file">
                                 <label>Choose Category</label>
                                 <select name="category" id="category" class="form-control @error('category') is-invalid @enderror">
-                                    <option value="{{ $subcategory->category_id }}">{{ $subcategory->categoryName }}</option>
+                                    {{-- <option value="{{ $subcategory->category_id }}">{{ $subcategory->categoryName }}</option> --}}
                                     @foreach ($categories as $category)
-                                        @if ($category->id != $subcategory->category_id)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endif
+                                        {{-- @if ($category->id != $subcategory->category_id) --}}
+                                            <option value="{{ $category->id }}" 
+                                                @if ($category->id == $subcategory->category_id)
+                                                    selected
+                                                @endif>{{ $category->name }}</option>
+                                        {{-- @endif --}}
                                     @endforeach
                                 </select>
                                 

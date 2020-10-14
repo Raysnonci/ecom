@@ -14,5 +14,6 @@
   <link href="{{ asset('admin/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ asset('admin/css/ruang-admin.min.css') }}" rel="stylesheet">
   @notifyCss
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
   
 </head>
