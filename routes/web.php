@@ -24,6 +24,7 @@ Route::get('/index', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('subcategories/{id}', 'ProductController@loadSubCategories');
 
 Route::resource('category', 'CategoryController');
 Route::resource('subcategory', 'SubcategoryController');

@@ -24,17 +24,16 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $subcategories = Subcategory::all();
-        return view('admin.product.create', compact('categories', 'subcategories'));
+        return view('admin.product.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:categories',
-            'description' => 'required',
+            'name' => 'required',
+            'description' => 'required|min:3',
             'image' => 'required|mimes:png,jpeg,jpg',
-            'price' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
             'additional_info' => 'required',
             'category' => 'required'
         ]);
@@ -63,8 +62,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $categories = Category::all();
-        $subcategories = Subcategory::all();
-        return view('admin.product.edit', compact('product', 'categories', 'subcategories'));
+        return view('admin.product.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -104,5 +102,11 @@ class ProductController extends Controller
         \Illuminate\Support\Facades\Storage::delete($file);
         notify()->success('Product Deleted Successfuly');
         return redirect()->route('product.index');
+    }
+
+    public function loadSubCategories(Request $request, $id)
+    {
+        $subcategories = Subcategory::where('category_id', $id)->pluck('name', 'id');
+        return response()->json($subcategories);
     }
 }

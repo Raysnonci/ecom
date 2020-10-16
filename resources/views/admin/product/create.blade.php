@@ -97,9 +97,6 @@
                                 <label>Choose Subcategory</label>
                                 <select name="subcategory" id="subcategory" class="form-control @error('subcategory') is-invalid @enderror">
                                     <option value="">Select Subcategory</option>
-                                    @foreach ($subcategories as $subcategory)
-                                        <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
-                                    @endforeach
                                 </select>
                                 
                                 @error('subcategory')
@@ -115,4 +112,29 @@
             </form>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $("document").ready(function(){
+            $("select[name='category']").on('change', function(){
+                //alert("ok");
+                var catId = $(this).val();
+                //alert(catId);
+                if(catId){
+                    $.ajax({
+                        url: '/subcategories/'+catId,
+                        type: 'GET',
+                        dataType: 'json',  // ini manggil yang di controllernya
+                        success: function(data){
+                            //alert(data); name sesuai dengan select di form
+                            $('select[name="subcategory"]').empty();
+                            //key id dari subcategory, value namanya
+                            $.each(data, function(key, value){
+                                $('select[name="subcategory"]').append('<option value=" '+key+' ">'+value+'</option>')
+                            })
+                        }
+                    })
+                }
+            })
+        });
+    </script>
 @endsection
